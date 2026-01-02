@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "build": "echo Skipping build step - backend runs plain Node.js",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
