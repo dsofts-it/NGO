@@ -1,0 +1,909 @@
+{
+  "info": {
+    "_postman_id": "a08d9f0d-2a4b-4f3f-bf77-2b673a9d9c88",
+    "name": "NGO Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "campaignId",
+      "value": ""
+    },
+    {
+      "key": "projectId",
+      "value": ""
+    },
+    {
+      "key": "donorId",
+      "value": ""
+    },
+    {
+      "key": "donationId",
+      "value": ""
+    },
+    {
+      "key": "volunteerId",
+      "value": ""
+    },
+    {
+      "key": "beneficiaryId",
+      "value": ""
+    },
+    {
+      "key": "eventId",
+      "value": ""
+    },
+    {
+      "key": "expenseId",
+      "value": ""
+    },
+    {
+      "key": "reportId",
+      "value": ""
+    },
+    {
+      "key": "contactId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/health/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"Password123\",\n  \"role\": \"admin\",\n  \"phone\": \"1234567890\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData.token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "    pm.environment.set(\"token\", jsonData.token);",
+                  "}",
+                  "if (jsonData && jsonData.user && jsonData.user._id) {",
+                  "    pm.collectionVariables.set(\"userId\", jsonData.user._id);",
+                  "    pm.environment.set(\"userId\", jsonData.user._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData.token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "    pm.environment.set(\"token\", jsonData.token);",
+                  "}",
+                  "if (jsonData && jsonData.user && jsonData.user._id) {",
+                  "    pm.collectionVariables.set(\"userId\", jsonData.user._id);",
+                  "    pm.environment.set(\"userId\", jsonData.user._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Campaigns",
+      "item": [
+        {
+          "name": "Create Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Winter Relief\",\n  \"description\": \"Emergency relief for cold season\",\n  \"goalAmount\": 50000,\n  \"status\": \"active\",\n  \"startDate\": \"2025-01-01\",\n  \"endDate\": \"2025-03-31\",\n  \"tags\": [\"relief\", \"winter\"]\n}"
+            },
+            "url": "{{baseUrl}}/api/campaigns"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"campaignId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Campaigns",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/campaigns?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Campaign",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/campaigns/{{campaignId}}"
+          }
+        },
+        {
+          "name": "Update Campaign",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"raisedAmount\": 30000\n}"
+            },
+            "url": "{{baseUrl}}/api/campaigns/{{campaignId}}"
+          }
+        },
+        {
+          "name": "Delete Campaign",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/campaigns/{{campaignId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Clean Water Initiative\",\n  \"description\": \"Build wells and water filters\",\n  \"location\": \"Rural District\",\n  \"status\": \"active\",\n  \"budget\": 20000,\n  \"campaign\": \"{{campaignId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/projects"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"projectId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Projects",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/projects?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Project",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/projects/{{projectId}}"
+          }
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"paused\",\n  \"beneficiariesCount\": 120\n}"
+            },
+            "url": "{{baseUrl}}/api/projects/{{projectId}}"
+          }
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/projects/{{projectId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Donors",
+      "item": [
+        {
+          "name": "Create Donor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Asha Patel\",\n  \"email\": \"asha@example.com\",\n  \"phone\": \"9990001111\",\n  \"type\": \"individual\",\n  \"notes\": \"Monthly donor\"\n}"
+            },
+            "url": "{{baseUrl}}/api/donors"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"donorId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Donors",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/donors?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Donor",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/donors/{{donorId}}"
+          }
+        },
+        {
+          "name": "Update Donor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Prefers email updates\"\n}"
+            },
+            "url": "{{baseUrl}}/api/donors/{{donorId}}"
+          }
+        },
+        {
+          "name": "Delete Donor",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/donors/{{donorId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Donations",
+      "item": [
+        {
+          "name": "Create Donation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donor\": \"{{donorId}}\",\n  \"campaign\": \"{{campaignId}}\",\n  \"project\": \"{{projectId}}\",\n  \"amount\": 250,\n  \"currency\": \"USD\",\n  \"method\": \"online\",\n  \"status\": \"paid\",\n  \"note\": \"Keep up the good work\"\n}"
+            },
+            "url": "{{baseUrl}}/api/donations"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"donationId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Donations",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/donations?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Donation",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/donations/{{donationId}}"
+          }
+        },
+        {
+          "name": "Update Donation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"refunded\"\n}"
+            },
+            "url": "{{baseUrl}}/api/donations/{{donationId}}"
+          }
+        },
+        {
+          "name": "Delete Donation",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/donations/{{donationId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Volunteers",
+      "item": [
+        {
+          "name": "Create Volunteer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ravi Singh\",\n  \"email\": \"ravi@example.com\",\n  \"phone\": \"8881112222\",\n  \"skills\": [\"teaching\", \"first aid\"],\n  \"availability\": \"Weekends\",\n  \"assignedProjects\": [\"{{projectId}}\"]\n}"
+            },
+            "url": "{{baseUrl}}/api/volunteers"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"volunteerId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Volunteers",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/volunteers?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Volunteer",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/volunteers/{{volunteerId}}"
+          }
+        },
+        {
+          "name": "Update Volunteer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"inactive\"\n}"
+            },
+            "url": "{{baseUrl}}/api/volunteers/{{volunteerId}}"
+          }
+        },
+        {
+          "name": "Delete Volunteer",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/volunteers/{{volunteerId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Beneficiaries",
+      "item": [
+        {
+          "name": "Create Beneficiary",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Child A\",\n  \"age\": 10,\n  \"gender\": \"female\",\n  \"location\": \"Village 1\",\n  \"needs\": [\"books\", \"nutrition\"],\n  \"project\": \"{{projectId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/beneficiaries"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"beneficiaryId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Beneficiaries",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/beneficiaries?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Beneficiary",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}"
+          }
+        },
+        {
+          "name": "Update Beneficiary",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}"
+          }
+        },
+        {
+          "name": "Delete Beneficiary",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Fundraising Gala\",\n  \"description\": \"Annual fundraising gala\",\n  \"date\": \"2025-02-15\",\n  \"location\": \"City Hall\",\n  \"capacity\": 200,\n  \"status\": \"planned\",\n  \"campaign\": \"{{campaignId}}\",\n  \"volunteers\": [\"{{volunteerId}}\"]\n}"
+            },
+            "url": "{{baseUrl}}/api/events"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"eventId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Events",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/events?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Event",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/events/{{eventId}}"
+          }
+        },
+        {
+          "name": "Update Event",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"active\"\n}"
+            },
+            "url": "{{baseUrl}}/api/events/{{eventId}}"
+          }
+        },
+        {
+          "name": "Delete Event",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/events/{{eventId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Expenses",
+      "item": [
+        {
+          "name": "Create Expense",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Medical supplies\",\n  \"amount\": 1200,\n  \"category\": \"health\",\n  \"date\": \"2025-01-10\",\n  \"project\": \"{{projectId}}\",\n  \"paidTo\": \"Health Supplier\",\n  \"paymentMethod\": \"bank\",\n  \"notes\": \"Urgent purchase\"\n}"
+            },
+            "url": "{{baseUrl}}/api/expenses"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"expenseId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Expenses",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/expenses?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Expense",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/expenses/{{expenseId}}"
+          }
+        },
+        {
+          "name": "Update Expense",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Invoice received\"\n}"
+            },
+            "url": "{{baseUrl}}/api/expenses/{{expenseId}}"
+          }
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/expenses/{{expenseId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Create Report",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Q1 Impact Report\",\n  \"periodStart\": \"2025-01-01\",\n  \"periodEnd\": \"2025-03-31\",\n  \"summary\": \"Quarterly impact summary\",\n  \"metrics\": {\"beneficiaries\": 120, \"wellsBuilt\": 3},\n  \"project\": \"{{projectId}}\",\n  \"published\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/reports"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"reportId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Reports",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reports?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Report",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reports/{{reportId}}"
+          }
+        },
+        {
+          "name": "Update Report",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"summary\": \"Updated summary after review\"\n}"
+            },
+            "url": "{{baseUrl}}/api/reports/{{reportId}}"
+          }
+        },
+        {
+          "name": "Delete Report",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/reports/{{reportId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contacts",
+      "item": [
+        {
+          "name": "Create Contact",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Visitor One\",\n  \"email\": \"visitor@example.com\",\n  \"phone\": \"7771113333\",\n  \"subject\": \"Partnership\",\n  \"message\": \"Interested in collaborating.\"\n}"
+            },
+            "url": "{{baseUrl}}/api/contacts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData && jsonData._id) {",
+                  "    pm.collectionVariables.set(\"contactId\", jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Contacts",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/contacts?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Contact",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/contacts/{{contactId}}"
+          }
+        },
+        {
+          "name": "Update Contact",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"resolved\"\n}"
+            },
+            "url": "{{baseUrl}}/api/contacts/{{contactId}}"
+          }
+        },
+        {
+          "name": "Delete Contact",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/contacts/{{contactId}}"
+          }
+        }
+      ]
+    }
+  ]
+}
